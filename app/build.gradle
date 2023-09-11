@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'androidx.navigation.safeargs'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -19,11 +21,20 @@ android {
             useSupportLibrary true
         }
     }
+    flavorDimensions "buildType"
+
+    productFlavors {
+        dev {
+            dimension "buildType"
+            buildConfigField 'String', 'BASE_URL', '"https://hotels4.p.rapidapi.com/"'
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles
+            getDefaultProguardFile('proguard-android-optimize.txt'); 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -33,12 +44,18 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         compose true
+        viewBinding = true
+        dataBinding = true
+        buildConfig = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion '1.3.2'
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -56,6 +73,11 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
+
+
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -63,4 +85,29 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    // Koin
+    implementation "io.insert-koin:koin-androidx-compose:$koin"
+
+    // Koin Tests
+    testImplementation "io.insert-koin:koin-test:$koin"
+    testImplementation "io.insert-koin:koin-test-junit4:$koin"
+    testImplementation "io.insert-koin:koin-android-test:$koin"
+
+    // Moshi Retrofit
+    implementation "com.squareup.moshi:moshi:$moshi"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi"
+    implementation "com.squareup.moshi:moshi-adapters:$moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
+    implementation "com.google.code.gson:gson:$retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor"
+
+    implementation "com.google.accompanist:accompanist-coil:$accompanist_coil"
+
+    implementation "com.jakewharton.timber:timber:$timber"
+
+    implementation "com.maxkeppeler.sheets-compose-dialogs:core:1.0.2"
+    implementation 'com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2'
 }

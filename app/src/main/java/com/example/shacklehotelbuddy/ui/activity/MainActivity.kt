@@ -1,4 +1,4 @@
-package com.example.shacklehotelbuddy
+package com.example.shacklehotelbuddy.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,6 +17,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.shacklehotelbuddy.R.drawable
+import com.example.shacklehotelbuddy.ui.detail.DetailScreen
+import com.example.shacklehotelbuddy.ui.home.HomeScreen
 import com.example.shacklehotelbuddy.ui.theme.ShackleHotelBuddyTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,42 +30,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ShackleHotelBuddyTheme {
-               MainScreen()
+
+                val navController = rememberNavController()
+
+                NavHost(navController, startDestination = "home") {
+
+                    composable("home") {
+                        HomeScreen(
+                            onSearchClicked = { navController.navigate("detail") },
+                        )
+                    }
+
+                    composable("detail") {
+                        DetailScreen(
+                            onBackClick = { navController.navigateUp() }
+                        )
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun MainScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .paint(
-                painterResource(id = R.drawable.background),
-                contentScale = ContentScale.FillWidth
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .border(width = 2.dp, color = ShackleHotelBuddyTheme.colors.grayBorder)
-                .background(ShackleHotelBuddyTheme.colors.white)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Hello!",
-                style = ShackleHotelBuddyTheme.typography.bodyMedium,
-                color = ShackleHotelBuddyTheme.colors.grayText
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ShackleHotelBuddyTheme {
-        MainScreen()
     }
 }
